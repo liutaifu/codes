@@ -38,3 +38,12 @@ char * RegKeyIni::GetRegKeyContent()
 {
 		return contentIni;
 }
+void RegKeyIni::DeleteInstance()
+{
+	if(m_RegKey)
+		delete m_RegKey;
+}
+void RegKeyIni::ReadPrivateProfileString(string *key,string *defPa,string *pBuf)
+{
+	GetPrivateProfileString(contentIni,key,defPa,pBuf);
+}

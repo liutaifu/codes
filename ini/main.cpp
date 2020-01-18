@@ -13,5 +13,6 @@ int main()
 		s_con = reg->GetRegKeyContent();
 
 		cout << "s_con is "<< s_con << endl;
+		reg->DeleteInstance();
 		return 0;
 }
