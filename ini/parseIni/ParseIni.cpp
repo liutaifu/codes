@@ -81,7 +81,7 @@ void WritePrivateProfileString(char *oriBuf,const char *firstKey,const char *str
 				perror("input the string is NULL\n");
 				return;
 		}
-		printf("%s the length of %c is %c index %d\n",str,str[2],str[0],index);
+//		printf("the default is %s the key is %s\n",oriBuf,str);
 
 /*		while(newName[i] != '\0')
 		{
@@ -113,9 +113,9 @@ void WritePrivateProfileString(char *oriBuf,const char *firstKey,const char *str
 						}
 						j = i;
 						printf("** oriBuf[%d] is %s\n",j,&(oriBuf[j+index+1]));
-						strncpy(new_Buf,oriBuf,j+index);
+						strncpy(new_Buf,oriBuf,j+index+1);
 		printf("*** newBuf is %s\n",new_Buf);
-						strcpy(&(new_Buf[j+index]),newName);
+						strcpy(&(new_Buf[j+index+1]),newName);
 		printf("**** newBuf is %s\n",new_Buf);
 						strcpy(&(new_Buf[j+index+in_n]),&(oriBuf[j+index+1+in_s]));
 						
@@ -183,7 +183,6 @@ void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,c
 				perror("input the string is NULL\n");
 				return;
 		}
-		printf("%s the length of %c is %c index %d\n",str,str[0],str[2],index);
 /*
 		while(str[i] != '\0')
 		{
@@ -206,7 +205,6 @@ void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,c
 						if(oriBuf[j+index+1] == ',')
 						{
 								strcpy(pbuf,defName);
-						printf("defname %s pbuf is %s\n",defName,pbuf);
 								break;
 						}
 						else
@@ -228,6 +226,7 @@ void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,c
 						continue;
 				}
 		}
+		printf("Get oriBuf is %s\n",oriBuf);
 
 }
 int PrivateProfileOpen(char *paBuf/*,char *pname*/)

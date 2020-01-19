@@ -15,15 +15,12 @@ RegKeyIni *RegKeyIni::m_RegKey = NULL;
 void RegKeyIni::GetContentIni(/*char *con*/)
 {
 		int ret = 0;
-		//char buf[1024];
 		memset(contentIni,0,sizeof(contentIni));
 		ret = PrivateProfileOpen(contentIni);
 		if(!ret)
 				cout << "success!"<< endl;
 		else
 				cout << "failed!\n"<< endl;
-		
-		//strcpy(con,buf);
 }
 RegKeyIni *RegKeyIni::GetInstance()
 {
@@ -43,18 +40,59 @@ void RegKeyIni::DeleteInstance()
 	if(m_RegKey)
 		delete m_RegKey;
 }
-void RegKeyIni::ReadPrivateProfileString(char *key,char *defPa,char *pBuf)
+void RegKeyIni::ReadPrivateProfileString()
 {
-//		const char *keyC = key->c_str();
-//		const char *defP = defPa->c_str();
-//		char *buf = NULL;
-	
-//		buf = (char *)malloc(256);
-		GetPrivateProfileString(contentIni,NULL,key,defPa,pBuf);
-
-		cout <<key<<" is "<< pBuf<<endl;
+	char pBuf[256];
+	memset(pBuf,0,sizeof(pbuf));
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
+	GetPrivateProfileString(contentIni,NULL,"LogPath","/opt/log",pBuf);
+	strcpy(logPath,pBuf);
 }
-void RegKeyIni::UpdatePrivateProfileString(char *key,char *defPa)
+void RegKeyIni::UpdatePrivateProfileString(char *keyN,char *defP)
 {
-		WritePrivateProfileString(contentIni,NULL,key,defPa);
+	WritePrivateProfileString(contentIni,NULL,keyN,defP);
 }
+char* RegKeyIni::GetLogPath()
+{
+	return logPath;
+}
+char* RegKeyIni::GetFilePreName()
+{
+	return filePreName;
+}
+char* RegKeyIni::GetSpCenterHost()
+{
+	return spCenterHost;
+}
+char* RegKeyIni::GetSpCenterPort()
+{
+	return spCenterPort;
+char* RegKeyIni::GetHttpPort()
+{
+	return httpPort;
+}
+char* RegKeyIni::GetTerminalDbHost()
+{
+	return terminalDbHost;
+}
+char* RegKeyIni::GetTerminalDbUser()
+{
+	return terminalDbUser;
+char* RegKeyIni::GetTerminalDbPass()
+{
+	return terminalDbPass;
