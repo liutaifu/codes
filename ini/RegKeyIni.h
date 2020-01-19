@@ -10,6 +10,7 @@ class RegKeyIni
 				void DeleteInstance();
 				char *GetRegKeyContent();
 				void ReadPrivateProfileString(char *key,char *defPa,char *pBuf);
+				void UpdatePrivateProfileString(char *key,char *defPa);
 		private:
 				char contentIni[512];
 				static RegKeyIni * m_RegKey;

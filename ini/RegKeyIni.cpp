@@ -54,3 +54,7 @@ void RegKeyIni::ReadPrivateProfileString(char *key,char *defPa,char *pBuf)
 
 		cout <<key<<" is "<< pBuf<<endl;
 }
+void RegKeyIni::UpdatePrivateProfileString(char *key,char *defPa)
+{
+		WritePrivateProfileString(contentIni,NULL,key,defPa);
+}

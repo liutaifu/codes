@@ -30,7 +30,7 @@ void GetLocalTime(char* tim, int format)
 		strcpy(tim,l_time);
 }
 
-int LengthOfString(char* buf)
+int LengthOfString(const char* buf)
 {
 		int i = 0, j = 0;
 		while(buf[i] != '\0')
@@ -59,7 +59,7 @@ void CreateLogFile(char *path)
 				}
 		}
 }
-void WritePrivateProfileString(char *oriBuf,char *firstKey,char *str,char *newName)
+void WritePrivateProfileString(char *oriBuf,const char *firstKey,const char *str,char *newName)
 {
 		size_t len = 0;
 		FILE *fd_r = NULL;
@@ -173,7 +173,7 @@ void WritePrivateProfileString(char *oriBuf,char *firstKey,char *str,char *newNa
 		}
 		fclose(fd_r);
 }
-void GetPrivateProfileString(char *oriBuf,char *firstKey,char *str,char *defName,char *pbuf)
+void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,const char *defName,char *pbuf)
 {
 		int index = 0;
 		int i = 0 ,j = 0;
@@ -217,6 +217,7 @@ void GetPrivateProfileString(char *oriBuf,char *firstKey,char *str,char *defName
 										j++;
 										i++;
 								}
+								pbuf[i] = '\0';
 								break;
 						}
 				}
