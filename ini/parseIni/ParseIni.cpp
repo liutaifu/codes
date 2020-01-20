@@ -5,6 +5,8 @@
 #include "ParseIni.h"
 #include <sys/stat.h>
 #include <sys/time.h>
+
+#include "debug.h"
 //#include <time.h>
 
 //#define F_MODE S_IRWXU | S_IRUSR｜S_IWUSR ｜S_IXUSR
@@ -98,25 +100,35 @@ void WritePrivateProfileString(char *oriBuf,const char *firstKey,const char *str
 		}*/
 		in_n = LengthOfString(newName);
 		index = LengthOfString(str);
+#ifdef DEBUG
 		printf("the length of %s index is %d in_n is %d\n",str,index,in_n);
+#endif
 		i = j = 0;
 		while(1)
 		{
 				if(!strncmp(&(oriBuf[j]),str,index))
 				{
 						i = j;
+#ifdef DEBUG
 						printf("* oriBuf[%d] is %s\n",j,&(oriBuf[j]));
+#endif
 						while(oriBuf[j+index+1] != ',')
 						{
 								j++;
 								in_s++;
 						}
 						j = i;
+#ifdef DEBUG
 						printf("** oriBuf[%d] is %s\n",j,&(oriBuf[j+index+1]));
+#endif
 						strncpy(new_Buf,oriBuf,j+index+1);
+#ifdef DEBUG
 		printf("*** newBuf is %s\n",new_Buf);
+#endif
 						strcpy(&(new_Buf[j+index+1]),newName);
+#ifdef DEBUG
 		printf("**** newBuf is %s\n",new_Buf);
+#endif
 						strcpy(&(new_Buf[j+index+in_n]),&(oriBuf[j+index+1+in_s]));
 						
 						break;
@@ -141,7 +153,9 @@ void WritePrivateProfileString(char *oriBuf,const char *firstKey,const char *str
 				}
 				else
 				{
-			//			printf("oriBuf[%d] is %s\n",j,&(oriBuf[j]));
+#ifdef DEBUG
+						printf("oriBuf[%d] is %s\n",j,&(oriBuf[j]));
+#endif
 						j++;
 						continue;
 				}
@@ -192,16 +206,19 @@ void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,c
 		}
 		*/
 		index = LengthOfString(str);
+#ifdef DEBUG
 		printf("the length of %s is %d\n",str,index);
 
-		i = j = 0;
 		printf("oriBuf is %s\n",oriBuf);
-	
+#endif
+
 		while(1)
 		{
 				if(!strncmp(&(oriBuf[j]),str,index))
 				{
-				//		printf("* oriBuf[%d] is %c\n",j,(oriBuf[j+index+1]));
+#ifdef DEBUG
+						printf("* oriBuf[%d] is %c\n",j,(oriBuf[j+index+1]));
+#endif
 						if(oriBuf[j+index+1] == ',')
 						{
 								strcpy(pbuf,defName);
@@ -221,13 +238,13 @@ void GetPrivateProfileString(char *oriBuf,const char *firstKey,const char *str,c
 				}
 				else
 				{
-				//		printf("oriBuf[%d] is %s\n",j,&(oriBuf[j]));
+#ifdef DEBUG
+						printf("oriBuf[%d] is %s\n",j,&(oriBuf[j]));
+#endif
 						j++;
 						continue;
 				}
 		}
-		printf("Get oriBuf is %s\n",oriBuf);
-
 }
 int PrivateProfileOpen(char *paBuf/*,char *pname*/)
 {

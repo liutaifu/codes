@@ -9,8 +9,9 @@ class RegKeyIni
 				static RegKeyIni *GetInstance();
 				void DeleteInstance();
 				char *GetRegKeyContent();
+				void GetPrivateByString(char*,const char*,const char*);
 				void ReadPrivateProfileString();
-				void UpdatePrivateProfileString(char *key,char *defPa);
+				void UpdatePrivateProfileString(const char *key,char *defPa);
 
 				char *GetLogPath();
 				char *GetFilePreName();
@@ -20,6 +21,7 @@ class RegKeyIni
 				char *GetTerminalDbHost();
 				char *GetTerminalDbUser();
 				char *GetTerminalDbPass();
+				char *GetTerminalDbName();
 		private:
 				char contentIni[512];
 				static RegKeyIni * m_RegKey;
@@ -31,4 +33,5 @@ class RegKeyIni
 				char *terminalDbHost;
 				char *terminalDbUser;
 				char *terminalDbPass;
+				char *terminalDbName;
 };

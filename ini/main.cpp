@@ -10,15 +10,21 @@ int main()
 		char s_con[1024];
 		//s_con = (char *)malloc(1024);
 		reg->GetContentIni();
-		//s_con = reg->GetRegKeyContent();
+		cout << "the ini is "<< reg->GetRegKeyContent()<<endl;
 
-		memset(s_con,0,sizeof(s_con));
-		//reg->ReadPrivateProfileString("LogPath","/opt/log",s_con);
 		reg->ReadPrivateProfileString();
-		cout << "s_con is "<< s_con << endl;
+		cout << "logPath is "<< reg->GetLogPath() << endl;
+		cout << "fileprename is "<< reg->GetFilePreName() << endl;
+		cout << "spcenterhost is "<< reg->GetSpCenterHost() << endl;
+		cout << "spcenterport is "<< reg->GetSpCenterPort() << endl;
+		cout << "httpport is "<< reg->GetHttpPort() << endl;
+		cout << "terminaldbhost is "<< reg->GetTerminalDbHost() << endl;
+		cout << "terminaldbuser is "<< reg->GetTerminalDbUser() << endl;
+		cout << "terminaldbpass is "<< reg->GetTerminalDbPass() << endl;
+		cout << "terminaldbname is "<< reg->GetTerminalDbName() << endl;
 
 
-		reg->UpdatePrivateProfileString("TerminalDbHost","106.15.38.100");
+	//	reg->UpdatePrivateProfileString("TerminalDbHost","106.15.38.100");
 		reg->DeleteInstance();
 		return 0;
 }
