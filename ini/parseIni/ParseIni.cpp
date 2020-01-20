@@ -9,14 +9,11 @@
 #include "debug.h"
 //#include <time.h>
 
-//#define F_MODE S_IRWXU | S_IRUSR｜S_IWUSR ｜S_IXUSR
-#define F_MODE  0x777 
-
 //static char iniBuf[1024];
 
 void GetLocalTime(char* tim, int format)
 {
-		char l_time[128];
+		char l_time[64];
 		time_t t_n;
 		time (&t_n);
 		memset(l_time,0,sizeof(l_time));
@@ -43,21 +40,31 @@ int LengthOfString(const char* buf)
 		return j;
 }
 
-void CreateLogFile(char *path)
+int CreateLogDir(char *path)
 {
 		if(!access(path,F_OK))
 		{
-				perror("file is exist!\n");
+				perror("dir is exist!\n");
+				return 0;
 		}
 		else
 		{
 				if(!mkdir(path,F_MODE))
 				{
 						perror("create dir success!\n");
+						if(chmod(path,F_MODE))
+						{
+							perror("chmod dir failed!\n");
+						}
+						else
+							perror("chmod dir success!\n");
+
+						return 0;
 				}
 				else
 				{
 						perror("create dir failed!\n");
+						return -1;
 				}
 		}
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "RegKeyIni.h"
-#include "parseIni/ParseIni.h"
+#include "../parseIni/ParseIni.h"
 
 using namespace std;
 

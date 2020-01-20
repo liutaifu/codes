@@ -8,4 +8,7 @@
 #endif
 
 
+//#define F_MODE S_IRWXU | S_IRUSR｜S_IWUSR ｜S_IXUSR
+#define F_MODE  0x777 
+
 #endif
