@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <sys/select.h>
 
 #include "Cabinet.h"
 //#include "../Socket/Socket.h"
@@ -39,8 +39,8 @@ void Cabinet::CabinetSocketFunc()
 		}
 		while(1)
 		{
-				tv.sec = 1;
-				tv.usec = 0;
+				tv.tv_sec = 1;
+				tv.tv_usec = 0;
 				FD_ZERO(&cab_fds);
 				FD_SET(c_sockId,&cab_fds);
 

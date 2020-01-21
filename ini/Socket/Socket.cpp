@@ -43,7 +43,7 @@ int Socket::GenBind(int socket,int port)
 
 		addr.sin_family = AF;
 		addr.sin_addr.s_addr = htonl(INY);
-		addr.sin_port = htons(atoi(port));
+		addr.sin_port = htons(port);
 		if(bind(socket,(struct sockaddr*)&addr,sizeof(struct sockaddr)))
 		{
 				cout <<"bind failed!"<<endl;
