@@ -34,14 +34,14 @@ void Clog::WriteLog(string *log)
 #ifdef DEBUG
 		cout <<"the length is "<<logs.length()<<endl;
 #endif
-		pthread_mutex_lock(log_mutex);
+		pthread_mutex_lock(&log_mutex);
 		if(logs.length() == fwrite(logs.c_str(),1,logs.length(),fd))
 		{
 				perror("write logs success!\n");
 		}
 		else
 				perror("write logs failed!\n");
-		pthread_mutex_unlock(log_mutex);
+		pthread_mutex_unlock(&log_mutex);
 }
 
 void Clog::GetCurrentTime(char *buf,int flag)
@@ -117,5 +117,5 @@ void Clog::DeleteClog()
 {
 		if(m_clog)
 				delete m_clog;
-		pthread_mutex_destory(&log_mutex);
+		pthread_mutex_destroy(&log_mutex);
 }

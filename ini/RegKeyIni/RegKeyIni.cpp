@@ -46,10 +46,7 @@ void RegKeyIni::GetPrivateByString(char* reKey,const char* key,const char* def)
 		char pBuf[256];
 		memset(pBuf,0,sizeof(pBuf));
 		GetPrivateProfileString(contentIni,NULL,key,def,pBuf);
-		cout <<"key is "<<key<<" def is "<<def<<endl;
 		strcpy(reKey,pBuf);
-		cout <<reKey<<" will be replaced by "<<pBuf<<endl;
-
 }
 void RegKeyIni::ReadPrivateProfileString()
 {
@@ -63,6 +60,8 @@ void RegKeyIni::ReadPrivateProfileString()
 	GetPrivateByString(spCenterPort,"SPCenterPort","9022");
 	httpPort = (char*)malloc(256);
 	GetPrivateByString(httpPort,"HTTPPort","9092");
+	listenNum = (char*)malloc(256);
+	GetPrivateByString(listenNum,"ListenNum","10240");
 	terminalDbHost = (char*)malloc(256);
 	GetPrivateByString(terminalDbHost,"TerminalDbHost","");
 	terminalDbUser = (char*)malloc(256);
@@ -88,13 +87,17 @@ char* RegKeyIni::GetSpCenterHost()
 {
 	return spCenterHost;
 }
-char* RegKeyIni::GetSpCenterPort()
+int RegKeyIni::GetSpCenterPort()
 {
-	return spCenterPort;
+	return atoi(spCenterPort);
 }
-char* RegKeyIni::GetHttpPort()
+int RegKeyIni::GetHttpPort()
 {
-	return httpPort;
+	return atoi(httpPort);
+}
+int RegKeyIni::GetListenNum()
+{
+	return atoi(listenNum);
 }
 char* RegKeyIni::GetTerminalDbHost()
 {

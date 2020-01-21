@@ -2,6 +2,7 @@
 #include <string>
 #include "RegKeyIni/RegKeyIni.h"
 #include "Clog/Clog.h"
+#include "Cabinet/Cabinet.h"
 
 using namespace std;
 
@@ -15,11 +16,24 @@ int main()
 
 		reg->ReadPrivateProfileString();
 
+
+
+#if 1
+		Cabinet* cab = Cabinet::GetInstance();
+
+		cout <<"socket id "<< cab->m_socket.GenSocket();
+		cout <<endl;
+		cab->SetCabinetParameter(reg->GetSpCenterPort(),
+						reg->GetListenNum());
+
+		cout <<"port is "<<cab->GetPort()<<endl;
+
+		cout <<"listenNum is "<<cab->GetListenNum()<<endl;
+#else
 		Clog *log = Clog::ClogInit();
 		log->OpenLog();
 		string slog = "today is beautul day!";
 		log->WriteLog(&slog);
-#if 0
 		cout << "logPath is "<< reg->GetLogPath() << endl;
 		cout << "fileprename is "<< reg->GetFilePreName() << endl;
 		cout << "spcenterhost is "<< reg->GetSpCenterHost() << endl;
@@ -33,6 +47,8 @@ int main()
 
 	//	reg->UpdatePrivateProfileString("TerminalDbHost","106.15.38.100");
 		reg->DeleteInstance();
+#if 0
 		log->DeleteClog();
+#endif
 		return 0;
 }

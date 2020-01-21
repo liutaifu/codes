@@ -16,8 +16,9 @@ class RegKeyIni
 				char *GetLogPath();
 				char *GetFilePreName();
 				char *GetSpCenterHost();
-				char *GetSpCenterPort();
-				char *GetHttpPort();
+				int GetSpCenterPort();
+				int GetHttpPort();
+				int GetListenNum();
 				char *GetTerminalDbHost();
 				char *GetTerminalDbUser();
 				char *GetTerminalDbPass();
@@ -30,6 +31,7 @@ class RegKeyIni
 				char *spCenterHost;
 				char *spCenterPort;
 				char *httpPort;
+				char *listenNum;
 				char *terminalDbHost;
 				char *terminalDbUser;
 				char *terminalDbPass;
