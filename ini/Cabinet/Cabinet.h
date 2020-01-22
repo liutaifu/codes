@@ -13,10 +13,16 @@ class Cabinet
 				void SetCabinetParameter(int port,int listenNum);
 				int GetPort();
 				int GetListenNum();
-				void CabinetSocketFunc();
+				void* CabinetSocketAccept();
+				int CabinetSocketReceive(Socket *acc_sock);
+				void CabinetSocketSendData(Socket *acc_sock,char *buf,int len);
+				Socket* CheckCabinetExist(int c_acceptId);
+				void DeleteCabinetExist(int c_acceptId);
 
 
 				Socket m_socket;
+				SocketList m_sockList;
+				pthread_mutex_t sock_mutex;
 				//RegKeyIni m_regkey;
 		private:
 				static Cabinet *m_cab;

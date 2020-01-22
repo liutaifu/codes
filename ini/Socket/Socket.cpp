@@ -80,11 +80,25 @@ int Socket::GenAccept(int socket)
 		accept_id = ret;
 		cout<<"client ip "<<inet_ntoa(client_addr.sin_addr)<<
 				" port "<<ntohs(client_addr.sin_port)<<endl;
+		SetClientParameter((void *)&client_addr);
 		return ret;
 }
 
 int Socket::GenRecvData(int accept)
 {
+		int ret = 0;
+		char buf[1024];
+		memset(buf,0,sizeof(buf));
+		ret = recv(accept,buf,sizeof(buf),0);
+		if( -1 == ret )
+		{
+				cout<<"recv error!"<<endl;
+		}else if(ret)
+		{
+				cout<<"recv data "<<buf<<endl;
+		}
+		return ret;
+#if 0
 		int ret = 0;
 		char buf[1024];
 		fd_set fds;
@@ -99,7 +113,7 @@ int Socket::GenRecvData(int accept)
 				tv.tv_sec = 5;
 				tv.tv_usec = 0;
 
-				ret = select(accept,&fds,NULL,NULL,&tv);
+				ret = select(accept+1,&fds,NULL,NULL,&tv);
 				if( 0 == ret )
 				{
 						cout<<"time is pass!"<<endl;
@@ -123,16 +137,22 @@ int Socket::GenRecvData(int accept)
 						}
 				}
 		}
+#endif
 }
 int Socket::GenSendData(int accept,char *buf,int len)
 {
-		if( -1 == write(accept,buf,len))
+		int ret = 0;
+		ret = send(accept,buf,len,0);
+		//if( -1 == write(accept,buf,len))
+		if( -1 == ret )
 		{
 				cout <<"write data error!\n"<<endl;
+				return -1;
 		}
 		else
 		{
 				cout<<"write data success "<<len<<endl;
+				return 0;
 		}
 }
 
@@ -154,7 +174,18 @@ int Socket::GenConnect()
 {
 }
 
+int Socket::GetAcceptId()
+{
+		return accept_id;
+}
 int Socket::GetSocketId()
 {
 		return sock_id;
+}
+void Socket::SetClientParameter(void *addr)
+{
+		struct sockaddr_in *s_addr = (struct sockaddr_in *)addr;
+		cli_ip = inet_ntoa(s_addr->sin_addr);
+		cli_port = ntohs(s_addr->sin_port);
+		cout<<"cli_ip "<<cli_ip<<"cli_port "<<cli_port<<endl;
 }
