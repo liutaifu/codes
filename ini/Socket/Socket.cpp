@@ -21,6 +21,29 @@ Socket::~Socket()
 {
 }
 
+Socket & Socket::operator=(const Socket & sock)
+{
+	if (this == &sock)
+		return *this;
+	delete cli_ip;
+	cli_ip = new char[strlen(sock.cli_ip) + 1];
+	strcpy(this->cli_ip,sock.cli_ip);
+	this->sock_id = sock.sock_id;
+	this->accept_id = sock.accept_id;
+	this->cli_port = sock.cli_port;
+
+	return *this;
+}
+//实现复制构造函数
+Socket::Socket(const Socket & sock)
+{
+	this->cli_ip = new char[strlen(sock.cli_ip) + 1];
+	strncpy(this->cli_ip,sock.cli_ip,strlen(sock.cli_ip)+1);
+	this->sock_id = sock.sock_id;
+	this->accept_id = sock.accept_id;
+	this->cli_port = sock.cli_port;
+	cout<<"copy port "<<this->cli_port<<" form "<<" port "<<sock.cli_port<<endl;
+}
 Socket* Socket::m_sock = NULL;
 
 int Socket::GenSocket()
@@ -77,7 +100,8 @@ int Socket::GenAccept(int socket)
 		ret = accept(socket,(struct sockaddr*)&client_addr,&len);
 		if( -1 == ret )
 				cout<<"accept failed!"<<endl;
-		accept_id = ret;
+		//accept_id = ret;
+		cout<<"accept_id "<<accept_id<<endl;
 		cout<<"client ip "<<inet_ntoa(client_addr.sin_addr)<<
 				" port "<<ntohs(client_addr.sin_port)<<endl;
 		SetClientParameter((void *)&client_addr);
@@ -174,6 +198,10 @@ int Socket::GenConnect()
 {
 }
 
+void Socket::SetAcceptId(int acceptid)
+{
+		accept_id = acceptid;
+}
 int Socket::GetAcceptId()
 {
 		return accept_id;
@@ -181,6 +209,14 @@ int Socket::GetAcceptId()
 int Socket::GetSocketId()
 {
 		return sock_id;
+}
+char* Socket::GetClientIp()
+{
+	return cli_ip;
+}
+int Socket::GetClientPort()
+{
+	return cli_port;
 }
 void Socket::SetClientParameter(void *addr)
 {

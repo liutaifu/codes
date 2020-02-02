@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 #include <pthread.h>
 #include "RegKeyIni/RegKeyIni.h"
 #include "Clog/Clog.h"
@@ -7,13 +8,13 @@
 
 using namespace std;
 
-void *handleData(void *arg)
+void *handleAccept(void *arg)
 {
 		Cabinet *cab = (Cabinet *)arg;
 		cab->CabinetSocketAccept();
 }
 
-void *handleAccept(void *arg)
+void *handleData(void *arg)
 {
 		int ret = 0;
 		SocketListIT it;
@@ -21,7 +22,11 @@ void *handleAccept(void *arg)
 		while(1)
 		{
 				if(cab->m_sockList.empty())
+				{
+						sleep(1);
 						continue;
+				}
+				cout<<"socklist size "<<cab->m_sockList.size()<<endl;
 				pthread_mutex_lock(&cab->sock_mutex);
 				for(it = cab->m_sockList.begin();it != cab->m_sockList.end();)
 				{

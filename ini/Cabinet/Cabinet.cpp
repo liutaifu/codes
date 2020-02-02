@@ -29,6 +29,8 @@ void* Cabinet::CabinetSocketAccept()
 		int ret = 0;
 		struct timeval tv;
 		fd_set cab_fds;
+		SocketListIT it;
+		Socket *tempSock;
 		pthread_mutex_init(&sock_mutex,NULL);
 		c_sockId = 0;
 		c_sockId = m_socket.GenSocket();
@@ -49,8 +51,10 @@ void* Cabinet::CabinetSocketAccept()
 				FD_ZERO(&cab_fds);
 				FD_SET(c_sockId,&cab_fds);
 */
+				tempSock = new Socket();
 				c_acceptId = 0;
-				c_acceptId = m_socket.GenAccept(c_sockId);
+				c_acceptId = tempSock->GenAccept(c_sockId);
+				//c_acceptId = m_socket.GenAccept(c_sockId);
 				if(c_acceptId < 0)
 				{
 						cout <<"cabinet accept failed!\n"<<endl;
@@ -58,8 +62,25 @@ void* Cabinet::CabinetSocketAccept()
 				if(CheckCabinetExist(c_acceptId))
 						continue;
 				pthread_mutex_lock(&sock_mutex);
-				m_sockList.push_back(&m_socket);
+				tempSock->SetAcceptId(c_acceptId);
+					
+#if DEBUG
+				cout<<"insert id "<<tempSock->GetAcceptId()<<endl;
+				cout<<"insert clientport "<<tempSock->GetClientPort()<<endl;
+#endif
+
+				m_sockList.insert(m_sockList.begin(),tempSock);
+				//m_sockList.push_back(&m_socket);
 				pthread_mutex_unlock(&sock_mutex);
+				tempSock->~Socket();
+#if DEBUG
+				cout<<"after insert socklist size "<<m_sockList.size()<<endl;
+				for(it = m_sockList.begin();it != m_sockList.end();it++)
+				{
+					cout<<"acceptid "<<(*it)->GetAcceptId()<<endl;
+					cout<<"accept clientport "<<(*it)->GetClientPort()<<endl;
+				}
+#endif
 	/*					
 				ret = select(c_acceptId+1,&cab_fds,NULL,NULL,&tv);
 				if( -1 == ret )
@@ -111,7 +132,7 @@ int Cabinet::CabinetSocketReceive(Socket *acc_sock)
 		ret = select(accept+1,&fds,NULL,NULL,&tv);
 		if( 0 == ret )
 		{
-				cout<<"time is out,no data from client"<<endl;
+				cout<<"time is out,no data from client"<<" acceptId "<<accept<<endl;
 				return -1;
 		}
 		else if( -1 == ret )
@@ -163,9 +184,12 @@ Socket* Cabinet::CheckCabinetExist(int c_acceptId)
 				return NULL;
 		for(it = m_sockList.begin();it != m_sockList.end();it++)
 		{
-				cout<<"2"<<endl;
+				cout<<"id "<< (*it)->GetAcceptId()<<" check id "<<c_acceptId<<endl;
 				if((*it)->GetAcceptId() == c_acceptId)
-						return *it;
+				{
+						return *it; //先把acceptid赋值给m_sockList导致if始终成立。
+						//解决方式就是初始化不赋值acceptid，在insert之前设置。
+				}
 		}
 		return NULL;
 }
