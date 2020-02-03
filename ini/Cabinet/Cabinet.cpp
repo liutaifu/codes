@@ -1,11 +1,14 @@
 #include <iostream>
 #include <sys/select.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #include "Cabinet.h"
 //#include "../Socket/Socket.h"
 
 using namespace std;
+
+#define DEBUG 1
 
 Cabinet::Cabinet()
 {
@@ -28,7 +31,7 @@ void* Cabinet::CabinetSocketAccept()
 {
 		int ret = 0;
 		struct timeval tv;
-		fd_set cab_fds;
+		//fd_set cab_fds;
 		SocketListIT it;
 		Socket *tempSock;
 		pthread_mutex_init(&sock_mutex,NULL);
@@ -162,6 +165,75 @@ int Cabinet::CabinetSocketReceive(Socket *acc_sock)
 				}
 		}
 		return 0;
+}
+void Cabinet::CabinetSelectAllReceive()
+{
+		int ret = 0;
+		int flag = 0;
+		struct timeval tv;
+		fd_set cab_fds;
+		SocketListIT it;
+
+		FD_ZERO(&cab_fds);
+
+		/*
+		 * 需要优化此处，避免每次都需要FD_SET*/
+		pthread_mutex_lock(&sock_mutex);
+		for(it = m_sockList.begin();it != m_sockList.end();it++)
+		{
+			FD_SET((*it)->GetAcceptId(),&cab_fds);
+		}
+		pthread_mutex_unlock(&sock_mutex);
+		it = m_sockList.begin();
+		while(1)
+		{
+			tv.tv_sec = 0;
+			tv.tv_usec = 500;
+
+			ret = select((*it)->GetAcceptId()+1,&cab_fds,NULL,NULL,&tv);
+			if( -1 == ret )
+			{
+				cout << "cabinet accept select failed!\n"<< endl;
+			}
+			else if( 0 == ret )
+			{
+				sleep(2);
+				cout<<"select timeout"<<endl;
+				break;
+			}
+			else
+			{
+				flag = ret;
+				for(it = m_sockList.begin();it != m_sockList.end();it++)
+				{
+					if(FD_ISSET((*it)->GetAcceptId(),&cab_fds))
+					{
+						ret  = m_socket.GenRecvData((*it)->GetAcceptId());
+						if( -1 == ret )
+						{
+							cout<<"recv error!"<<endl;
+						}
+						else if(ret)
+						{
+							cout<<"recv data "<<endl;
+						}
+						else
+						{
+							if(1 == flag)
+								cout<<"client close!\n"<<endl;
+								//	return 2;客户端断开连接
+									//DeleteCabinetExist(acc_sock->GetAcceptId());
+						}
+					}
+				}
+				break;
+			}
+		}
+/*
+ *		while(1)
+		{
+		}
+		*/
 }
 void Cabinet::DeleteCabinetExist(int c_acceptId)
 {

@@ -2,6 +2,7 @@
 #include <string>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/select.h>
 #include "RegKeyIni/RegKeyIni.h"
 #include "Clog/Clog.h"
 #include "Cabinet/Cabinet.h"
@@ -17,10 +18,13 @@ void *handleAccept(void *arg)
 void *handleData(void *arg)
 {
 		int ret = 0;
+		struct timeval tv;
+		fd_set cab_fds;
 		SocketListIT it;
 		Cabinet *cab = (Cabinet *)arg;
 		while(1)
 		{
+#if 0
 				if(cab->m_sockList.empty())
 				{
 						sleep(1);
@@ -46,6 +50,16 @@ void *handleData(void *arg)
 						}
 				}
 				pthread_mutex_unlock(&cab->sock_mutex);
+#else
+				if(cab->m_sockList.empty())
+				{
+						sleep(10);
+						continue;
+				}
+				//pthread_mutex_lock(&cab->sock_mutex);
+				cab->CabinetSelectAllReceive();
+				//pthread_mutex_unlock(&cab->sock_mutex);
+#endif
 		}
 }
 int main()

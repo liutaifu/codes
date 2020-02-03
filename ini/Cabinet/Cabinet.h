@@ -15,6 +15,7 @@ class Cabinet
 				int GetListenNum();
 				void* CabinetSocketAccept();
 				int CabinetSocketReceive(Socket *acc_sock);
+				void CabinetSelectAllReceive();
 				void CabinetSocketSendData(Socket *acc_sock,char *buf,int len);
 				Socket* CheckCabinetExist(int c_acceptId);
 				void DeleteCabinetExist(int c_acceptId);
