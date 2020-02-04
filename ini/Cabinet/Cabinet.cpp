@@ -204,7 +204,7 @@ void Cabinet::CabinetSelectAllReceive()
 			else
 			{
 				flag = ret;
-				for(it = m_sockList.begin();it != m_sockList.end();it++)
+				for(it = m_sockList.begin();it != m_sockList.end();++it)
 				{
 					if(FD_ISSET((*it)->GetAcceptId(),&cab_fds))
 					{
@@ -220,9 +220,16 @@ void Cabinet::CabinetSelectAllReceive()
 						else
 						{
 							if(1 == flag)
-								cout<<"client close!\n"<<endl;
+							{
+								sleep(2);
+								//cout<<"client close!\n"<<endl;
 								//	return 2;客户端断开连接
-									//DeleteCabinetExist(acc_sock->GetAcceptId());
+								DeleteCabinetExist((*it)->GetAcceptId());
+								if(m_sockList.empty())
+								{
+									break;
+								}
+							}
 						}
 					}
 				}
@@ -244,7 +251,7 @@ void Cabinet::DeleteCabinetExist(int c_acceptId)
 				if((*it)->GetAcceptId() == c_acceptId)
 						it = m_sockList.erase(it);
 				else
-						it++;
+						++it;
 		}
 		pthread_mutex_unlock(&sock_mutex);
 }

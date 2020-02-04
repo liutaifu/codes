@@ -54,6 +54,7 @@ void *handleData(void *arg)
 				if(cab->m_sockList.empty())
 				{
 						sleep(10);
+						cout<<"socklist is empty"<<endl;
 						continue;
 				}
 				//pthread_mutex_lock(&cab->sock_mutex);
