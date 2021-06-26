@@ -34,21 +34,20 @@ void  addNewNodeTail(sin_list *head,int item)
 				temph = head;
 				head = head->next;
 		}
-		printf("list node0 \n");
 		temp->next = NULL;
 		temp->data = item;
 		temp->prior = temph;
 		temph->next = temp;
-		printf("list node1 \n");
+		printf("list add  %d\n",item);
 }
 void  addNewNodeHead(sin_list *head,int item)
 {
 		sin_list *temp = (sin_list *)malloc(sizeof(sin_list));
 		temp->data = item;
 		temp->next = head->next;
-		temp->prior = head->prior;
+		head->next->prior = temp;
 		head->next = temp;
-		head->prior = temp;
+		printf("list add  %d\n",item);
 }
 void  deleteNewNodeHead(sin_list *head,int item)
 {
@@ -65,11 +64,10 @@ void  showList(sin_list *head)
 				temp = temp->next;
 		}
 		printf("\n counterclockwise list node \n");
-		temp = tempp;
-		while(temp != head)
+		while(tempp)
 		{
-				printf(" %d ",temp->data);
-				temp = temp->prior;
+				printf(" %d ",tempp->data);
+				tempp = tempp->prior;
 		}
 		printf("\n");
 }
