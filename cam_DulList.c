@@ -4,9 +4,9 @@
 
 
 typedef struct list {
-		struct list *next;
-		struct list *prior;
-		int data;
+	struct list *next;
+	struct list *prior;
+	int data;
 } dualList;
 
 
@@ -31,69 +31,68 @@ dualList *initList();
 
 dualList *initList()
 {
-		dualList *head = (dualList *)malloc(sizeof(dualList));
-		head->next = NULL;
-		head->prior = NULL;
-		head->data = -1;
-		return head;
+	dualList *head = (dualList *)malloc(sizeof(dualList));
+	head->next = NULL;
+	head->prior = NULL;
+	head->data = -1;
+	return head;
 }
 void  addNewNodeTail(dualList *head,int item)
 {
-		dualList *temp = (dualList *)malloc(sizeof(dualList));
+	dualList *temp = (dualList *)malloc(sizeof(dualList));
 #if 0
-		dualList *temph = (dualList *)malloc(sizeof(dualList));
-		while(head)
-		{
-	
-				temph = head;
-				head = head->next;
-		}
-		temp->next = NULL;
-		temp->data = item;
-		temp->prior = temph;
-		temph->next = temp;
+	dualList *temph = (dualList *)malloc(sizeof(dualList));
+	while(head)
+	{
+		temph = head;
+		head = head->next;
+	}
+	temp->next = NULL;
+	temp->data = item;
+	temp->prior = temph;
+	temph->next = temp;
 #else
-		while(head->next != NULL) {
-			head = head->next;
-		}
-		temp->next = NULL;
-		temp->data = item;
-		temp->prior = head;
-		head->next = temp;
+	while(head->next != NULL) {
+		head = head->next;
+	}
+	temp->next = NULL;
+	temp->data = item;
+	temp->prior = head;
+	head->next = temp;
 #endif
-		printf("list add  %d\n",item);
+	printf("list add  %d\n",item);
 }
 void  addNewNodeHead(dualList *head,int item)
 {
-		dualList *temp = (dualList *)malloc(sizeof(dualList));
-		temp->data = item;
-		temp->next = head->next;
-		temp->prior = head;
-		head->next->prior = temp;
-		head->next = temp;
-		printf("list add  %d\n",item);
+	dualList *temp = (dualList *)malloc(sizeof(dualList));
+	temp->data = item;
+	temp->next = head->next;
+	temp->prior = head;
+	head->next->prior = temp;
+	head->next = temp;
+	printf("list add  %d\n",item);
 }
 void  deleteNodeHead(dualList *head)
 {
-		dualList *temp = (dualList *)malloc(sizeof(dualList));
+	dualList *temp = (dualList *)malloc(sizeof(dualList));
 
 #if 0
-		temp = head->next;
+	temp = head->next;
 		
-		while(temp != NULL) {
-			if (temp != NULL) {
-				temp = temp->next;
-				head->next = temp;
-				temp->prior = head;
-			}
-		}
-#else
-		temp = head->next;
+	while(temp != NULL) {
 		if (temp != NULL) {
 			temp = temp->next;
 			head->next = temp;
 			temp->prior = head;
 		}
+	}
+#else
+	temp = head->next;
+	if (temp != NULL) {
+		temp = temp->next;
+		head->next = temp;
+		temp->prior = head;
+	}
 #endif
 }
 void deleteNodeTail(dualList *head)
@@ -179,71 +178,71 @@ dualList *findNodeList(dualList *head, int data)
 void  showList(dualList *head)
 {
 #if 0
-		dualList *temp = (dualList *)malloc(sizeof(dualList));
-		dualList *tempp = (dualList *)malloc(sizeof(dualList));
+	dualList *temp = (dualList *)malloc(sizeof(dualList));
+	dualList *tempp = (dualList *)malloc(sizeof(dualList));
 
-		temp = head->next;
-		printf("clockwise list node \n");
-		while(temp)
-		{
-				tempp = temp;
-				printf(" %d ",temp->data);
-				temp = temp->next;
-		}
-		printf("\n counterclockwise list node \n");
-		while(tempp)
-		{
-				printf(" %d ",tempp->data);
-				tempp = tempp->prior;
-		}
-		printf("\n");
+	temp = head->next;
+	printf("clockwise list node \n");
+	while(temp)
+	{
+		tempp = temp;
+		printf(" %d ",temp->data);
+		temp = temp->next;
+	}
+	printf("\n counterclockwise list node \n");
+	while(tempp)
+	{
+		printf(" %d ",tempp->data);
+		tempp = tempp->prior;
+	}
+	printf("\n");
 #else 
-		printf("clockwise list node \n");
-		while(head->next != NULL) {
-			printf(" %d ",head->next->data);
-			head = head->next;
-		}
+	printf("clockwise list node \n");
+	while(head->next != NULL) {
+		printf(" %d ",head->next->data);
+		head = head->next;
+	}
 
-		printf("\n counterclockwise list node \n");
-		while(head->prior != NULL) {
-			printf(" %d ",head->data);
-			head = head->prior;
-		}
-		printf("\n");
+	printf("\n counterclockwise list node \n");
+	while(head->prior != NULL) {
+		printf(" %d ",head->data);
+		head = head->prior;
+	}
+	printf("\n");
 #endif
 }
 
 int main()
 {
-		int i = 0;
-		dualList *temp = (dualList *)malloc(sizeof(dualList));
+	int i = 0;
+	dualList *temp = (dualList *)malloc(sizeof(dualList));
 
-		dualList *head = initList();
-		printf("list nodea \n");
-		for (i = 0 ; i < 5 ; i ++)
-				addNewNodeTail(head,i);
+	dualList *head = initList();
+	printf("list nodea \n");
+	for (i = 0 ; i < 5 ; i ++)
+		addNewNodeTail(head,i);
 				
-		printf("list nodeb \n");
-		for (i = 10 ; i > 5 ; i --)
-				addNewNodeHead(head,i);
-		printf("list nodec \n");
+	printf("list nodeb \n");
+	for (i = 10 ; i > 5 ; i --)
+		addNewNodeHead(head,i);
+	printf("list nodec \n");
 
-		showList(head);
+	showList(head);
 
-		printf("\nnum of list %d\n",numOfList(head));
-		printf("\nhead is empty %d\n",headIsEmpty(head));
-		deleteNodeHead(head);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
-		deleteNodeTail(head);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	printf("\nhead is empty %d\n",headIsEmpty(head));
+	deleteNodeHead(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
+	deleteNodeTail(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
 
-		temp = findNodeList(head,3);
+	temp = findNodeList(head,3);
 
-		deleteNodeIndex(head, temp);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
+	deleteNodeIndex(head, temp);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
 
-		return 0;
+	return 0;
 }

@@ -4,8 +4,8 @@
 
 
 typedef struct single_list {
-		struct single_list *next;
-		int data;
+	struct single_list *next;
+	int data;
 } cycleList;
 
 /*add node at tail*/
@@ -29,30 +29,30 @@ cycleList *initList();
 
 cycleList *initList()
 {
-		cycleList *head = (cycleList *)malloc(sizeof(cycleList));
-		head->next = head;
-		head->data = -1;
-		return head;
+	cycleList *head = (cycleList *)malloc(sizeof(cycleList));
+	head->next = head;
+	head->data = -1;
+	return head;
 }
 void  addNewNodeTail(cycleList *head,int item)
 {
-		cycleList *temp = (cycleList *)malloc(sizeof(cycleList));
-		cycleList *tempp = (cycleList *)malloc(sizeof(cycleList));
+	cycleList *temp = (cycleList *)malloc(sizeof(cycleList));
+	cycleList *tempp = (cycleList *)malloc(sizeof(cycleList));
 
-		tempp = head;
-		while(head->next != tempp) {
-			head = head->next;
-		}
-		temp->next = head->next;
-		temp->data = item;
-		head->next = temp;
+	tempp = head;
+	while(head->next != tempp) {
+		head = head->next;
+	}
+	temp->next = head->next;
+	temp->data = item;
+	head->next = temp;
 }
 void  addNewNodeHead(cycleList *head,int item)
 {
-		cycleList *temp = (cycleList *)malloc(sizeof(cycleList));
-		temp->data = item;
-		temp->next = head->next;
-		head->next = temp;
+	cycleList *temp = (cycleList *)malloc(sizeof(cycleList));
+	temp->data = item;
+	temp->next = head->next;
+	head->next = temp;
 }
 void  deleteNodeHead(cycleList *head)
 {
@@ -156,45 +156,43 @@ void  showList(cycleList *head)
 	printf("list node \n");
 	while(head->next != temp)
 	{
-//			printf(" %d %p\n",head->next->data,head->next);
-			printf(" %d ",head->next->data);
-			head = head->next;
+//		printf(" %d %p\n",head->next->data,head->next);
+		printf(" %d ",head->next->data);
+		head = head->next;
 	}
 }
 
 int main()
 {
-		int i = 0;
-		cycleList *temp;
-		temp = (cycleList *)malloc(sizeof(cycleList));
+	int i = 0;
+	cycleList *temp;
+	temp = (cycleList *)malloc(sizeof(cycleList));
 
-		cycleList *head = initList();
-		for (i = 0 ; i <= 5 ; i ++)
-				addNewNodeTail(head,i);
+	cycleList *head = initList();
+	for (i = 0 ; i <= 5 ; i ++)
+		addNewNodeTail(head,i);
 				
-		for (i = 10 ; i > 5 ; i --)
-				addNewNodeHead(head,i);
+	for (i = 10 ; i > 5 ; i --)
+		addNewNodeHead(head,i);
 
-		showList(head);
+	showList(head);
 
-		printf("\nnum of list %d\n",numOfList(head));
-		printf("\nhead is empty %d\n",headIsEmpty(head));
-		deleteNodeHead(head);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
-		deleteNodeTail(head);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	printf("\nhead is empty %d\n",headIsEmpty(head));
+	deleteNodeHead(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
+	deleteNodeTail(head);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
 
-		printf("\n");
-#if 1
+	printf("\n");
 
-		temp = findNodeList(head,7);
+	temp = findNodeList(head,7);
 
-		printf("189\n");
-		deleteNodeIndex(head, temp);
-		printf("\nnum of list %d\n",numOfList(head));
-		showList(head);
-#endif
-		return 0;
+	deleteNodeIndex(head, temp);
+	printf("\nnum of list %d\n",numOfList(head));
+	showList(head);
+
+	return 0;
 }
