@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "cyclelist.h"
 
 
-
+#if 0
 typedef struct single_list {
 	struct single_list *next;
 	int data;
@@ -26,6 +27,7 @@ int headIsEmpty(cycleList *head);
 void  showList(cycleList *head);
 /*init list*/
 cycleList *initList();
+#endif
 
 cycleList *initList()
 {
@@ -114,7 +116,7 @@ void deleteNodeIndex(cycleList *head, cycleList *temp) {
 		if (head->next != temp) {
 		    tempp = head;
 			head = head->next;
-			printf("\n%3d %3d %p %p ",tempp->data,head->data,head,head->next);
+	//		printf("\n%3d %3d %p %p ",tempp->data,head->data,head,head->next);
 		} else {
 			if (tempp == head) {
 				tempp->next = head->next->next;
@@ -162,13 +164,18 @@ void  showList(cycleList *head)
 	}
 }
 
+#if 0
 int main()
 {
 	int i = 0;
+	int m = 0;
+	int n = 0;
 	cycleList *temp;
 	temp = (cycleList *)malloc(sizeof(cycleList));
 
 	cycleList *head = initList();
+
+#if 0
 	for (i = 0 ; i <= 5 ; i ++)
 		addNewNodeTail(head,i);
 				
@@ -194,5 +201,36 @@ int main()
 	printf("\nnum of list %d\n",numOfList(head));
 	showList(head);
 
+#endif
+	scanf("%d",&m);
+	scanf("%d",&n);
+
+	printf("m:%d n:%d\n",m,n);
+
+	for(i = 1; i <= m; i++) {
+		addNewNodeTail(head, i);
+	}
+	showList(head);
+
+	temp = head;
+	i = 0;
+	while(head != head->next) {
+		if(head->next == temp) {
+			head = head->next;
+			continue;
+		} else if(head->next->next == head) {
+			break;
+		} else {
+			i ++;
+			head = head->next;
+		}
+		if (i == n) {
+			printf("delete i %d data %d\n",i,head->data);
+			deleteNodeIndex(temp, head);
+			i = 0;
+		}
+	}
+	showList(temp);
 	return 0;
 }
+#endif
