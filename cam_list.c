@@ -6,27 +6,41 @@
 typedef struct single_list {
 		struct single_list *next;
 		int data;
-} sin_list;
+} sinList;
 
+/*add node at tail*/
+void  addNewNodeTail(sinList *head,int item);
+/*add node at head*/
+void  addNewNodeHead(sinList *head,int item);
+/*delete node at head*/
+void  deleteNodeHead(sinList *head);
+/*delete node at tail*/
+void  deleteNodeTail(sinList *head);
+/*delete node by index*/
+void  deleteNodeIndex(sinList *head,sinList *temp);
+/*num of list*/
+int numOfList(sinList *head);
+/*list is empty*/
+int headIsEmpty(sinList *head);
+/*show list*/
+void  showList(sinList *head);
+/*init list*/
+sinList *initList();
 
-void  addNewNodeTail(sin_list *head,int item);
-void  addNewNodeHead(sin_list *head,int item);
-void  deleteNewNodeHead(sin_list *head,int item);
-void  showList(sin_list *head);
-sin_list *initList();
+sinList *findNodeList(sinList *head, int data);
 
-sin_list *initList()
+sinList *initList()
 {
-		sin_list *head = (sin_list *)malloc(sizeof(sin_list));
+		sinList *head = (sinList *)malloc(sizeof(sinList));
 		head->next = NULL;
-		head->data = NULL;
+		head->data = -1;
 		return head;
 }
-void  addNewNodeTail(sin_list *head,int item)
+void  addNewNodeTail(sinList *head,int item)
 {
-		sin_list *temp = (sin_list *)malloc(sizeof(sin_list));
-		sin_list *temph = (sin_list *)malloc(sizeof(sin_list));
-		//temp = head;
+		sinList *temp = (sinList *)malloc(sizeof(sinList));
+#if 0
+		sinList *temph = (sinList *)malloc(sizeof(sinList));
 		while(head)
 		{
 				temph = head;
@@ -35,21 +49,101 @@ void  addNewNodeTail(sin_list *head,int item)
 		temp->next = NULL;
 		temp->data = item;
 		temph->next = temp;
-		printf("list node0 \n");
+#else
+		while(head->next != NULL) {
+			head = head->next;
+		}
+		temp->next = NULL;
+		temp->data = item;
+		head->next = temp;
+#endif
 }
-void  addNewNodeHead(sin_list *head,int item)
+void  addNewNodeHead(sinList *head,int item)
 {
-		sin_list *temp = (sin_list *)malloc(sizeof(sin_list));
+		sinList *temp = (sinList *)malloc(sizeof(sinList));
 		temp->data = item;
 		temp->next = head->next;
 		head->next = temp;
 }
-void  deleteNewNodeHead(sin_list *head,int item)
+void  deleteNodeHead(sinList *head)
 {
+	sinList *temp = (sinList *)malloc(sizeof(sinList));
+
+	temp = head->next;
+	if (temp != NULL) {
+		temp = temp->next;
+		head->next = temp;
+	}
 }
-void  showList(sin_list *head)
+
+void deleteNodeTail(sinList *head)
 {
-		sin_list *temp = head->next;
+	while(head != NULL) {
+		if (head->next != NULL && head->next->next != NULL) {
+			head = head->next;
+		} else {
+			head->next = NULL;
+			break;
+		}
+	}
+}
+
+int numOfList(sinList *head)
+{
+	int num = 0;
+	while(head->next != NULL) {
+		num ++;
+		head = head->next;
+	}
+
+	return num;
+}
+
+int headIsEmpty(sinList *head)
+{
+	return (head->next != NULL) ? 0 : 1;
+}
+void deleteNodeIndex(sinList *head, sinList *temp) {
+	sinList *tempp = (sinList*)malloc(sizeof(sinList));
+
+	while(head != NULL) {
+		if (head->next != temp) {
+		    tempp = head;
+			head = head->next;
+		} else {
+			if (head->next->next != NULL) {
+				tempp = tempp->next;
+				head = head->next;
+
+				tempp->next = head->next;
+			}
+			else {
+				head->next = NULL;
+			}
+			break;
+		}
+	}
+}
+
+sinList *findNodeList(sinList *head, int data)
+{
+	sinList *tempp = (sinList*)malloc(sizeof(sinList));
+	
+	while(head != NULL) {
+		if (head->data == data) {
+			tempp = head;
+			break;
+		} else {
+			head = head->next;
+		}
+	}
+
+	return tempp;
+}
+
+void  showList(sinList *head)
+{
+		sinList *temp = head->next;
 		printf("list node \n");
 		while(temp)
 		{
@@ -61,18 +155,34 @@ void  showList(sin_list *head)
 int main()
 {
 		int i = 0;
-		sin_list *temp;
+		sinList *temp;
+		temp = (sinList *)malloc(sizeof(sinList));
 
-		sin_list *head = initList();
-		printf("list nodea \n");
-		for (i = 0 ; i < 5 ; i ++)
+		sinList *head = initList();
+		for (i = 0 ; i <= 5 ; i ++)
 				addNewNodeTail(head,i);
 				
-		printf("list nodeb \n");
 		for (i = 10 ; i > 5 ; i --)
 				addNewNodeHead(head,i);
-		printf("list nodec \n");
 
 		showList(head);
+
+		printf("\nnum of list %d\n",numOfList(head));
+		printf("\nhead is empty %d\n",headIsEmpty(head));
+		deleteNodeHead(head);
+		printf("\nnum of list %d\n",numOfList(head));
+		showList(head);
+		deleteNodeTail(head);
+		printf("\nnum of list %d\n",numOfList(head));
+		showList(head);
+
+#if 1
+
+		temp = findNodeList(head,4);
+
+		deleteNodeIndex(head, temp);
+		printf("\nnum of list %d\n",numOfList(head));
+		showList(head);
+#endif
 		return 0;
 }
