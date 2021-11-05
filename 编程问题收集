@@ -1,0 +1,126 @@
+1. 使用多指针处理大数据段，数据会被改变的问题
+    DV测试获取fps数据时，数组值异常；使用gdb调试工具查看，watch检测变量(addr[12])的值发生变化时的位置，打印变量的地址和引起异常的变量地址相同
+int getFPSOne(double *addr)
+{
+    int i = -1;
+    int j = -1;
+    int fd = -1;
+    char bufFps[MAX];
+    int len = MAX;
+    int result = -1;
+    char *buff;
+    char *buff_pipe1;
+    char *buff_pipe2;
+    double first,second;
+    int fflag = -1;
+
+    //memset(addr, 0, 20);
+    buff_pipe1 = (char *)malloc(sizeof(char) * STR_LEN);
+    memset(buff_pipe1, 0, STR_LEN);
+    buff_pipe2 = (char *)malloc(sizeof(char) * STR_LEN);
+    memset(buff_pipe2, 0, STR_LEN);
+
+    buff = (char *)malloc(sizeof(char) * DATA_LEN);
+    memset(buff, 0, DATA_LEN);
+    memset(bufFps, 0, len);
+    memset(buf_fps, 0, len);
+
+    for(fd = 0; fd < 20; fd++)
+    {
+	       printf("fps %d: %f\n", fd, addr[fd]);
+    }
+    fd = open(viodelay, O_RDONLY);
+    if (fd == -1) {
+	printf("open somid failed!\n");
+	return -1;
+    }
+    /*read data*/
+    result = read(fd, bufFps, len);
+    if (result < 0)
+    {
+	printf("read somid failed!\n");
+	return -1;
+    }
+    memcpy(buf_fps, bufFps, len);
+    printf("buf_fps :%s\n", buf_fps);
+
+    for(fd = 45,j = 0; fd < len; fd++)
+    {
+	first = 0;
+	second = 0;
+	if(buf_fps[fd] == NUM_A)
+	{
+	    memcpy(buff_pipe1, &(buf_fps[fd + 2]), STR_LEN);
+	    printf("buff_pipe1 :%s %d\n", buff_pipe1, __LINE__);
+	    memcpy(buff_pipe2, &(buf_fps[fd + 20]),1);
+
+	    if((buff_pipe2[0] == NUM_F)){
+		memcpy(buff, &(buf_fps[fd + 23]), DATA_LEN);
+		first = atof(buff);
+
+		fflag = 1;
+		printf("buff_pipe2 :%f %d\n", first,__LINE__);
+	    }else if((buff_pipe2[0] == NUM_S)){
+		memcpy(buff, &(buf_fps[fd + 22]), DATA_LEN);
+		first = atof(buff);
+		fflag = 2;
+
+		printf("buff_pipe2 :%f %d\n", first,__LINE__);
+	    }
+	    for(i = fd + 42; i < len; i++){
+		memcpy(buff_pipe2, &(buf_fps[i]), STR_LEN);
+
+		if (!strcmp(buff_pipe1, buff_pipe2)){
+
+		    if(fflag == 1) {
+			memcpy(buff, &(buf_fps[i + 21]), DATA_LEN);
+		    } else if (fflag == 2) {
+			memcpy(buff, &(buf_fps[i + 20]), DATA_LEN);
+		    }
+		    second = atof(buff);
+
+		    printf("buff_pipe2 :%f %d\n", second,__LINE__);
+		    break;
+		}
+		if (i == len - 1) {
+		    fflag = 3;
+		}
+	    }
+	    if ((fflag != 3) && (second != 0)) {
+		addr[j++] = (second - first) * 1000;
+		fd += 27;
+	    }
+	    printf("line %d fd %d j %d\n",__LINE__, fd, j);
+	}
+
+    }
+    close(fd);
+    for(fd = j; fd < 20; fd++)
+    {
+	printf("fps %d: %f\n", fd, addr[fd]);
+    }
+    return addr[0];
+}
+
+
+int main()
+{
+    double *addrdata = NULL;
+    addrdata = (double *)malloc(sizeof(int) * 20);
+    memset(addrdata, 0, 20);
+    ******
+    getFPSOne(addrdata);
+    ******
+}
+GDB信息：
+(gdb) watch addr[12]
+Hardware watchpoint 2: addr[12]
+
+Old value = 0
+New value = 9.2681085190923842e+199
+0x0000555555555723 in getFPSOne (addr=0x55555555b2a0) at testDataStruct.c:187
+187		    memcpy(buff_pipe1, &(buf_fps[fd + 2]), STR_LEN);
+(gdb) p buff_pipe1
+$1 = 0x55555555b300 "event_si"
+(gdb) p &(addr[12])
+$2 = (double *) 0x55555555b300
